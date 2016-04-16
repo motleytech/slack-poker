@@ -1,0 +1,33 @@
+/poker start story_id
+
+start a new session for team / channel / story_id.
+if a session existed, send back error msg
+
+check cache last update time... if more than 24 hours, refresh cache
+check cache for usernames and channel users
+get users for the team
+get users in channel
+
+send back message that new session has started... with status message containing info about user votes
+
+
+
+/poker vote 3
+send msg to user that vote has been received.
+
+if everyone has voted
+  calc points
+  send result to channel
+  end session
+else
+  send status msg to channel after 5 secs
+
+
+
+/poker end
+if in session:
+  calc points ignoring un-casted votes
+  send result
+  end session
+else:
+  send error "no session"

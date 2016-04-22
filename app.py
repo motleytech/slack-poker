@@ -1,5 +1,6 @@
 from twisted.web import server, resource
 from twisted.internet import reactor
+import reloader
 
 class Root(resource.Resource):
     isLeaf = False
@@ -19,14 +20,26 @@ class PokerInterface(resource.Resource):
         return resource.Resource.getChild(self, name, request)
 
     def render_GET(self, request):
+        print request, request.uri
+        if request.uri.endswith('command'):
+            return "Hello from poker command"
         return "Hello from poker."
 
-root = Root()
-poker = PokerInterface()
-pcommand = PokerInterface()
-root.putChild('poker', poker)
-poker.putChild('command', PokerInterface())
 
-site = server.Site(root)
-reactor.listenTCP(8080, site)
-reactor.run()
+def myMain():
+    root = Root()
+    poker = PokerInterface()
+    pcommand = PokerInterface()
+
+    root.putChild('poker', poker)
+    poker.putChild('command', pcommand)
+
+    site = server.Site(root)
+    port = 8080
+    print 'attaching to port %s...' % port
+    reactor.listenTCP(port, site)
+    reactor.run()
+
+
+reloader.main(myMain)
+#reactor.run()
